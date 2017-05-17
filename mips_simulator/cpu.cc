@@ -78,6 +78,37 @@ void Cpu::CheckMemory() {
     cout << "+----------------+----------------+" << endl;
 }
 
+void Cpu::Convert() {
+    cout << "please input the assembly code" << endl;
+    string s;
+    getchar();
+    getline(cin , s);
+    MIPS mips("instructor");
+    ofstream ofs("tmp_instructor");
+    ofs << s;
+    ofs.close();
+    mips.convertToBinary("tmp_instructor" , "tmp_binary_code");
+    ifstream ifs("tmp_binary_code");
+    ifs >> s;
+    ifs.close();
+    cout << "the binary code is " << s << endl;
+}
+void Cpu::Invert() {
+    cout << "please input the binary code" << endl;
+    string s;
+    getchar();
+    getline(cin , s);
+    MipsInvert mips_invert("info.txt");
+    ofstream ofs("binary.txt");
+    ofs << s;
+    ofs.close();
+    mips_invert.Convert("binary.txt" , "assemble.txt");
+    ifstream ifs("assemble.txt");
+    getline(ifs , s);
+    ifs.close();
+    cout << "the assembly code is " << s << endl;
+}
+
 // convert a decimal number to 32-bit binary string
 string Cpu::DecimalToBinary32(int n) {
     vector<int> v;

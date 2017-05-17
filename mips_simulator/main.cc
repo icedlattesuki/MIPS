@@ -13,7 +13,11 @@ int main() {
     cout << "+------------+-----------------------+" << endl;
     cout << "|     T      |     run by step       |" << endl;
     cout << "+------------+-----------------------+" << endl;
-    cout << "|     Q      |       quit            |" << endl;
+    cout << "|     C      |      assembly         |" << endl;
+    cout << "+------------+-----------------------+" << endl;
+    cout << "|     I      |   invert assembly     |" << endl;
+    cout << "+------------+-----------------------+" << endl;
+    cout << "|     Q      |        quit           |" << endl;
     cout << "+------------+-----------------------+" << endl;
     while (1) {
         string instructor;
@@ -27,6 +31,10 @@ int main() {
             test.InsertInstructor();
         else if (instructor == "T")
             test.RunByStep();
+        else if (instructor == "C")
+            test.Convert();
+        else if (instructor == "I")
+            test.Invert();
         else if (instructor == "Q")
             break;
     }

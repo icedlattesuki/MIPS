@@ -1,6 +1,7 @@
 #ifndef _CPU_H
 #define _CPU_H
 #include "mips.h"
+#include "mips_invert.h"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -13,6 +14,8 @@ class Cpu {
     void RunByStep();
     void CheckRegister();
     void CheckMemory();
+    void Convert();
+    void Invert();
   private:
     vector<string> memory_;
     vector<string> register_;
