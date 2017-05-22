@@ -30,6 +30,7 @@ class Cpu {
     string ShiftRightLogic(string s , unsigned int shamt);
     string ShiftRightArithmetic(string s , unsigned int shamt);
     void Execute(string s);
+    void Insert(string s);
 };
 
 #endif

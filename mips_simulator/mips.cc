@@ -222,8 +222,10 @@ void MIPS::convertToBinary(string path1 , string path2){
                 for(int i = 0;i < s2.length() && s2[i] != '\n';i++){
                     if(s2[i] == '$'){
                         string s;
-                        while(s2[++i] != ',' && s2[i] != ')'){
+                        i++;            
+                        while(s2[i] != ',' && s2[i] != ')'){
                             s += s2[i];
+                            i++;
                         }
                         int n = stoi(s);
                         vector<int> tmp;
@@ -241,12 +243,11 @@ void MIPS::convertToBinary(string path1 , string path2){
                         }
                     }
                     else{
-                        string s;
-                        s += s2[i];
-                        while(s2[++i] != '('){
-                            s += s2[i];
-                        }
-                        int n = stoi(s);
+                        int t = i;
+                        while (s2[i] != '(')
+                            i++;
+                        string s = s2.substr(t , i - t);
+                        int n = solveExpression(s);
                         vector<int> tmp;
                         binary_16(n , tmp);
                         for(int j = 0;j < 16;j++){
@@ -279,13 +280,12 @@ void MIPS::convertToBinary(string path1 , string path2){
                         }
                     }
                     else{
-                        string s;
-                        s += s2[i];
-                        while(s2[++i] != '\n'){
-                            s += s2[i];
-                        }
+                        int t = i;
+                        while(s2[i] != '\n')
+                            i++;
+                        string s = s2.substr(t , i - t);
+                        int n = solveExpression(s);
                         vector<int> tmp;
-                        int n = stoi(s);
                         binary_16(n , tmp);
                         for(int j = 0;j < 16;j++){
                             res[16 + j] = tmp[tmp.size() - 1 - j];
@@ -317,13 +317,12 @@ void MIPS::convertToBinary(string path1 , string path2){
                         }
                     }
                     else{
-                        string s;
-                        s += s2[i];
-                        while(s2[++i] != '\n'){
-                            s += s2[i];
-                        }
+                        int t = i;
+                        while(s2[i] != '\n')
+                            i++;
+                        string s = s2.substr(t , i - t);
+                        int n = solveExpression(s);
                         vector<int> tmp;
-                        int n = stoi(s);
                         binary_16(n , tmp);
                         for(int j = 0;j < 16;j++){
                             res[16 + j] = tmp[tmp.size() - 1 - j];
@@ -445,3 +444,48 @@ void MIPS::print(){
         cout << endl;
     }
 }
+
+int MIPS::solveExpression(string s) {
+    vector<int> v;
+    string s1;
+    for (int i = 0;i < s.length();i++) {
+        if (s[i] != '+' && s[i] != '-' && s[i] != '*' && s[i] != '/') {
+            s1 += s[i];
+        }
+        else {
+            v.push_back(stoi(s1));
+            s1 = "";
+        }
+    }
+    v.push_back(stoi(s1));
+    int index = 0;
+    for (int j = 0;j < s.length();j++) {
+        if (s[j] == '+' || s[j] == '-' || s[j] == '*' || s[j] == '/')
+            index++;
+        if (s[j] == '*') {
+            int t = v[index - 1] * v[index];
+            v[index] = t;
+            v.erase(v.begin() + index - 1);
+            index--;
+        }
+        if (s[j] == '/') {
+            int t = v[index - 1] / v[index];
+            v[index] = t;
+            v.erase(v.begin() + index - 1);
+            index--;
+        }
+    }
+    int res = v[0];
+    index = 1;
+    for (int j = 0;j < s.length();j++) {
+        if (s[j] == '+') {
+            res += v[index];
+            index++;
+        }
+        else if (s[j] == '-') {
+            res -= v[index];
+            index++;
+        }
+    }
+    return res;
+} 

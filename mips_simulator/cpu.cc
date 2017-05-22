@@ -24,19 +24,62 @@ void Cpu::InsertInstructor() {
     cout << "Input example: add $1,$2,$3" << endl;
     getchar();
     getline(cin , s);
-    ofstream ofs("tmp_instructor");
-    ofs << s;
-    ofs.close();
-    MIPS m("instructor");
-    m.convertToBinary("tmp_instructor" , "tmp_binary_code");
-    ifstream ifs("tmp_binary_code");
-    ifs >> s;
-    ifs.close();
-    
-    for (int i = 0; i < 4; ++i) {
-        memory_[end_ + i] = s.substr(8 * i , 8);
+    string op;
+    int i = 0;
+    while (s[i] != ' ') {
+        op += s[i];
+        i++;
     }
-    end_ += 4;
+    if (op == "move" || op == "blt" || op == "bgt" || op == "ble" || op == "bge") {
+        string rr;
+        string rs;
+        string rt;
+        i++;
+        while (s[i] != ',') {
+            rs += s[i];
+            i++;
+        }
+        i++;
+        while (i < s.length() && s[i] != ',') {
+            rt += s[i];
+            i++;
+        }
+        i++;
+        while (i < s.length() && s[i] != ',') {
+            rr += s[i];
+            i++;
+        }
+        if (op == "move") {
+            string s1 = "add " + rs + "," + rt + ",$0";
+            Insert(s1);
+        }
+        else if (op == "blt") {
+            string s1 = "slt $1," + rs + "," + rt;
+            Insert(s1);
+            s1 = "bne $1,$0," + rr;
+            Insert(s1);
+        }
+        else if (op == "bgt") {
+            string s1 = "slt $1," + rt + "," + rs;
+            Insert(s1);
+            s1 = "bne $1,$0," + rr;
+            Insert(s1);
+        }
+        else if (op == "ble") {
+            string s1 = "slt $1," + rt + "," + rs;
+            Insert(s1);
+            s1 = "beq $1,$0," + rr;
+            Insert(s1);
+        }
+        else if (op == "bge") {
+            string s1 = "slt $1," + rs + "," + rt;
+            Insert(s1);
+            s1 = "beq $1,$0," + rr;
+        }
+    }
+    else {
+        Insert(s);
+    }
     cout << "insert successfully!" << endl;
 }
 
@@ -62,7 +105,7 @@ void Cpu::CheckRegister() {
         string s = BinaryToHexadecimal(register_[i]);
         cout << "    0x" << s << "         |" << endl;
     }
-    cout << "+-----------------+-----------------------+" << endl;
+    cout << "+------------------+-----------------------+" << endl;
 }
 
 // show the memory
@@ -405,4 +448,19 @@ void Cpu::Execute(string s) {
         if (op == "000011")
             register_[31] = DecimalToBinary32(PC_);
     }
+}
+
+void Cpu::Insert(string s) {
+    ofstream ofs("tmp_instructor");
+    ofs << s;
+    ofs.close();
+    MIPS m("instructor");
+    m.convertToBinary("tmp_instructor" , "tmp_binary_code");
+    ifstream ifs("tmp_binary_code");
+    ifs >> s;
+    ifs.close();
+    for (int i = 0; i < 4; ++i) {
+        memory_[end_ + i] = s.substr(8 * i , 8);
+    }
+    end_ += 4;
 }

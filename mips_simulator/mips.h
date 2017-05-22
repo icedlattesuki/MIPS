@@ -4,6 +4,7 @@
 #include<fstream>
 #include<vector>
 #include<string>
+#include<stack>
 using namespace std;
 
 class MIPS{
@@ -19,6 +20,7 @@ class MIPS{
     void binary(int n , vector<int>& t);
     void binary_16(int n , vector<int>& t);
     void binary_26(int n , vector<int>& t);
+    int solveExpression(string s);
 };
 
 class MIPS::instructor{
