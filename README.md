@@ -3,9 +3,8 @@
 
 **编译**
 
-- Mac系统只需要简单的使用make命令执行文件夹中的makefile就可以完成编译（需要有clang++编译器）。
+- Mac、Unix以及Linux系统只需要简单的使用make命令执行文件夹中的makefile就可以完成编译。
 - windows系统需要手动编译（程序规模较小，编译起来不算麻烦，文件之间的依赖关系可以参照makefile）。当然，windows下也可以使用make，但需要安装相应的工具，并且需要修改makefile中指定的编译器。
-- unix系统和linux系统下将makefile中的clang++改为g++，然后执行make命令即可。
 
 **功能**
 
